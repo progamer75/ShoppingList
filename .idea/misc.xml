@@ -8,13 +8,16 @@
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/nav_header_main.xml" value="0.22826086956521738" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/activity_main_drawer.xml" value="0.27447916666666666" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/main.xml" value="0.27447916666666666" />
+        <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.3115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3292572463768116" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.3292572463768116" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.3292572463768116" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3292572463768116" />
         <entry key="app/src/main/res/layout/fragment_shopping_list.xml" value="0.3292572463768116" />
-        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.3292572463768116" />
+        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.67" />
         <entry key="app/src/main/res/layout/test_git.xml" value="0.259963768115942" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.35625" />
+        <entry key="app/src/main/res/menu/main.xml" value="0.35625" />
       </map>
     </option>
   </component>
