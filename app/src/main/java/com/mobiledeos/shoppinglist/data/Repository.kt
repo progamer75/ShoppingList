@@ -40,32 +40,85 @@ object Repository {
 
     suspend fun updateList(context: Context, listId: Int, newName: String, newDescription: String) {
         try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.updateList(listId, newName, newDescription)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }
     }
 
+    /**
+     *
+     * Возвращает список всех shoppingList.
+     *
+     * @return возвращает список или emptyList, если возникла ошибка.
+     */
     suspend fun getLists(context: Context): List<ShoppingList> {
-        TODO("Сделать getLists")
+        return try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.getLists()
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+            emptyList()
+        }
     }
 
     //
     // ShoppingList
     //
-    suspend fun addThing(context: Context, thing: Thing) {
-        TODO("Сделать addThing")
+    suspend fun addThing(context: Context, listId: Int,
+                         serial: Int,
+                         name: String,
+                         category: String,
+                         quantity: Double,
+                         unit: String
+        ){
+        try {
+            val thing = Thing(name = name,
+                serial = serial,
+                category = category,
+                quantity = quantity,
+                unit = unit
+                )
+            ShoppingListRoom.getDatabase(context).shoppingListDao.addThing(thing)
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+        }
     }
 
     suspend fun deleteThing(context: Context, id: Int) {
-
+        try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.deleteThing(id)
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+        }
     }
 
-    suspend fun updateThing(context: Context, thing: Thing) {
-
+    suspend fun updateThing(context: Context,
+                            id: Int,
+                            newSerial: Int,
+                            newName: String,
+                            newCategory: String,
+                            newQuantity: Double,
+                            newUnit: String
+    ) {
+        try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.updateThing(
+                id,
+                newSerial,
+                newName,
+                newCategory,
+                newQuantity,
+                newUnit)
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+        }
     }
 
-    suspend fun getShoppingList(context: Context, listId: Int): List<ShoppingList> {
-        TODO("Do getShoppingList")
+    suspend fun getShoppingList(context: Context, listId: Int): List<Thing> {
+        return try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.getThingList(listId)
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+            emptyList()
+        }
     }
-
 }

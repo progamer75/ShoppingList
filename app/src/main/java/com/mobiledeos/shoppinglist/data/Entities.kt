@@ -25,11 +25,11 @@ data class Users (
 @Entity
 data class Thing ( //элемент списка покупок
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val order: Int = 0, // порядковый номер в списке
-    val shoppingListId: Int,
+    val serial: Int = 0, // порядковый номер в списке
+    val listId: Int = 0, // shoppingList.id
     val name: String,
     val category: String = "",
-    val quantity: BigDecimal = BigDecimal.ZERO,
+    val quantity: Double = 0.0,
     val unit: String = ""
 )
 
