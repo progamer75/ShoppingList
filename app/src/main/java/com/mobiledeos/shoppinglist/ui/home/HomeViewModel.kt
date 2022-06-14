@@ -21,16 +21,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun refreshList() {
         viewModelScope.launch {
-            val l = Repository.getLists(context)
-            Log.i(TAG, "${l.size}")
-            _lists.value = l
+            _lists.value = Repository.getLists(context)
         }
     }
 
     fun onAddButton() {
         viewModelScope.launch {
             val sl = Repository.addList(context, "Новый список")
-            Log.i(TAG, "${sl?.name}")
         }
         refreshList() //может быть надо будет добавить LiveData в ShoppingListRoom чтобы не обновлять
     }

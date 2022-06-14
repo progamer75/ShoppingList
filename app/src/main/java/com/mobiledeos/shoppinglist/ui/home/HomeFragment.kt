@@ -30,12 +30,8 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.vm = homeViewModel
         val root: View = binding.root
-
-/*        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
 
         val listsAdapter = ListsAdapter()
         val listsRV = binding.listsRecyclerView
@@ -49,7 +45,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        //binding.lifecycleOwner = this
+        binding.lifecycleOwner = this
 
         return root
     }
