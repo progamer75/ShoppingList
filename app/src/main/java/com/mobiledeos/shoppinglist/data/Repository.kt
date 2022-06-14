@@ -14,7 +14,7 @@ object Repository {
      *
      * @return возвращает ShoppingList или null, если возникла ошибка.
      */
-    suspend fun createList(context: Context, listName: String, listDescription: String): ShoppingList? {
+    suspend fun addList(context: Context, listName: String, listDescription: String = ""): ShoppingList? {
         val list = ShoppingList(
             name = listName,
             description = listDescription
