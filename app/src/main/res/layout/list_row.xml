@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="row"
+            type="com.mobiledeos.shoppinglist.data.ShoppingList" />
+        <variable
+            name="vm"
+            type="com.mobiledeos.shoppinglist.ui.home.HomeViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="@{row.name}"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </LinearLayout>
+</layout>

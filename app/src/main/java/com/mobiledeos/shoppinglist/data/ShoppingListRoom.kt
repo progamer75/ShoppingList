@@ -23,7 +23,7 @@ interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addThing(thing: Thing)
 
-    @Query("Update Thing set name=:newName, serial=:newSerial, category=:newCategory," +
+    /*@Query("Update Thing set name=:newName, serial=:newSerial, category=:newCategory," +
             "quantity=:newQuantity, unit=:newUnit where id=:id")
     suspend fun updateThing(id: Int,
                             newSerial: Int,
@@ -33,9 +33,12 @@ interface ShoppingListDao {
                             newUnit: String
     )
 
-    @Query("Delete from Thing where id = :id")
+        @Query("Delete from Thing where id = :id")
     suspend fun deleteThing(id: Int)
+    */
 
+    @Update suspend fun updateThing(thing: Thing)
+    @Delete suspend fun deleteThing(thing: Thing)
 }
 
 @Database(entities = [ShoppingList::class, Users::class, Thing::class, Categories::class], version = 1, exportSchema = false)

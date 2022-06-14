@@ -72,7 +72,9 @@ object Repository {
                          unit: String
         ){
         try {
-            val thing = Thing(name = name,
+            val thing = Thing(
+                listId = listId,
+                name = name,
                 serial = serial,
                 category = category,
                 quantity = quantity,
@@ -84,30 +86,33 @@ object Repository {
         }
     }
 
-    suspend fun deleteThing(context: Context, id: Int) {
+    suspend fun deleteThing(context: Context, thing: Thing/*id: Int*/) {
         try {
-            ShoppingListRoom.getDatabase(context).shoppingListDao.deleteThing(id)
+            ShoppingListRoom.getDatabase(context).shoppingListDao.deleteThing(thing)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }
     }
 
     suspend fun updateThing(context: Context,
-                            id: Int,
+        thing: Thing
+/*                            id: Int,
                             newSerial: Int,
                             newName: String,
                             newCategory: String,
                             newQuantity: Double,
-                            newUnit: String
+                            newUnit: String*/
     ) {
         try {
             ShoppingListRoom.getDatabase(context).shoppingListDao.updateThing(
-                id,
+/*                id,
                 newSerial,
                 newName,
                 newCategory,
                 newQuantity,
-                newUnit)
+                newUnit*/
+                thing
+            )
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }

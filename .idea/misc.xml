@@ -6,8 +6,9 @@
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/account_75.xml" value="0.1" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.137" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/content_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_home.xml" value="0.1265625" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_shopping_list.xml" value="0.1265625" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/list_row.xml" value="0.22435897435897437" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/nav_header_main.xml" value="0.22826086956521738" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/activity_main_drawer.xml" value="0.27447916666666666" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/main.xml" value="0.27447916666666666" />

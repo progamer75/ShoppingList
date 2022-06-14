@@ -14,7 +14,7 @@ data class ShoppingList (
 
 @Entity
 data class Users (
-    val id: String = "", // предполагается здесь будет номер телефона, может еще чего
+    @PrimaryKey val id: String = "", // предполагается здесь будет номер телефона, может еще чего
     val name: String
 ) {
     fun getIdHash(): Int { // в firestore будет записываться это вместо id
@@ -35,6 +35,7 @@ data class Thing ( //элемент списка покупок
 
 @Entity
 data class Categories (
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val order: Int = 0, // порядковый номер в списке категорий
     val name: String,
     val icon: Int = 0 // иконка категории, на будущее
