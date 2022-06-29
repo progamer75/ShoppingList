@@ -11,11 +11,11 @@ interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addList(list: ShoppingList)
 
-    @Query("Update ShoppingList set name=:newName, description=:newDescription where id=:listId")
-    suspend fun updateList(listId: Int, newName: String, newDescription: String)
+    @Update
+    suspend fun updateList(list: ShoppingList)
 
-    @Query("Delete from ShoppingList where id = :id")
-    suspend fun deleteList(id: Int)
+    @Delete
+    suspend fun deleteList(list: ShoppingList)
 
     @Query("Select * from Thing where listId=:listId")
     suspend fun getThingList(listId: Int): List<Thing>
@@ -23,25 +23,24 @@ interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addThing(thing: Thing)
 
-    /*@Query("Update Thing set name=:newName, serial=:newSerial, category=:newCategory," +
-            "quantity=:newQuantity, unit=:newUnit where id=:id")
-    suspend fun updateThing(id: Int,
-                            newSerial: Int,
-                            newName: String,
-                            newCategory: String,
-                            newQuantity: Double,
-                            newUnit: String
-    )
+    @Update
+    suspend fun updateThing(thing: Thing)
 
-        @Query("Delete from Thing where id = :id")
-    suspend fun deleteThing(id: Int)
-    */
+    @Delete
+    suspend fun deleteThing(thing: Thing)
 
-    @Update suspend fun updateThing(thing: Thing)
-    @Delete suspend fun deleteThing(thing: Thing)
+    @Query("Select * from ShoppingListUser Inner join SharedUsers on ShoppingListUser.id=SharedUsers.userId and SharedUsers.listId=:listId")
+    suspend fun getSharedUsers(listId: Int): List<ShoppingListUser>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addUser(users: ShoppingListUser)
+
+    @Delete
+    suspend fun deleteUser(users: ShoppingListUser)
+
 }
 
-@Database(entities = [ShoppingList::class, Users::class, Thing::class, Categories::class], version = 1, exportSchema = false)
+@Database(entities = [ShoppingList::class, ShoppingListUser::class, Thing::class, Categories::class], version = 1, exportSchema = false)
 abstract class ShoppingListRoom: RoomDatabase() {
   abstract val shoppingListDao: ShoppingListDao
     companion object {

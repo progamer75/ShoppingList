@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
     id 'kotlin-kapt'
 }
 
@@ -37,6 +36,8 @@ android {
     }
 }
 
+apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
@@ -57,6 +58,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
     def roomVersion = '2.4.2'
     implementation("androidx.room:room-runtime:$roomVersion")

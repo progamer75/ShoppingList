@@ -6,7 +6,7 @@ import android.widget.Toast.LENGTH_LONG
 
 object Repository {
     // Если список не расшарен, то вся логика в Room,
-    // если расшарен, то все происходит в firestore, возможно даже без синхронизации в Room
+    // если расшарен, то все происходит в firestore, возможно даже без синхронизации с Room
 
     /**
      *
@@ -14,33 +14,31 @@ object Repository {
      *
      * @return возвращает ShoppingList или null, если возникла ошибка.
      */
-    suspend fun addList(context: Context, listName: String, listDescription: String = ""): ShoppingList? {
-        val list = ShoppingList(
-            name = listName,
-            description = listDescription
-        )
-
+    suspend fun addList(context: Context, list: ShoppingList) {
         try {
             ShoppingListRoom.getDatabase(context).shoppingListDao.addList(list)
-        } catch (ex: Exception) {
-            Toast.makeText(context, ex.message, LENGTH_LONG).show()
-            return null
-        }
-
-        return list
-    }
-
-    suspend fun deleteList(context: Context, id: Int) {
-        try {
-            ShoppingListRoom.getDatabase(context).shoppingListDao.deleteList(id)
+            updateFirestoreList(list)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }
     }
 
-    suspend fun updateList(context: Context, listId: Int, newName: String, newDescription: String) {
+    private fun updateFirestoreList(list: ShoppingList) {
+        ShoppingListFirestore.updateList(list)
+    }
+
+    suspend fun deleteList(context: Context, list: ShoppingList) {
         try {
-            ShoppingListRoom.getDatabase(context).shoppingListDao.updateList(listId, newName, newDescription)
+            ShoppingListRoom.getDatabase(context).shoppingListDao.deleteList(list)
+        } catch (ex: Exception) {
+            Toast.makeText(context, ex.message, LENGTH_LONG).show()
+        }
+    }
+
+    suspend fun updateList(context: Context, list: ShoppingList) {
+        try {
+            ShoppingListRoom.getDatabase(context).shoppingListDao.updateList(list)
+            updateFirestoreList(list)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }
@@ -64,29 +62,20 @@ object Repository {
     //
     // ShoppingList
     //
-    suspend fun addThing(context: Context, listId: Int,
-                         serial: Int,
-                         name: String,
-                         category: String,
-                         quantity: Double,
-                         unit: String
-        ){
+    suspend fun addThing(context: Context, list: ShoppingList, thing: Thing) {
         try {
-            val thing = Thing(
-                listId = listId,
-                name = name,
-                serial = serial,
-                category = category,
-                quantity = quantity,
-                unit = unit
-                )
             ShoppingListRoom.getDatabase(context).shoppingListDao.addThing(thing)
+            updateFirestoreThing(list, thing)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }
     }
 
-    suspend fun deleteThing(context: Context, thing: Thing/*id: Int*/) {
+    private fun updateFirestoreThing(list: ShoppingList, thing: Thing) {
+        ShoppingListFirestore.updateThing(list, thing)
+    }
+
+    suspend fun deleteThing(context: Context, thing: Thing) {
         try {
             ShoppingListRoom.getDatabase(context).shoppingListDao.deleteThing(thing)
         } catch (ex: Exception) {
@@ -94,25 +83,10 @@ object Repository {
         }
     }
 
-    suspend fun updateThing(context: Context,
-        thing: Thing
-/*                            id: Int,
-                            newSerial: Int,
-                            newName: String,
-                            newCategory: String,
-                            newQuantity: Double,
-                            newUnit: String*/
-    ) {
+    suspend fun updateThing(context: Context, list: ShoppingList, thing: Thing) {
         try {
-            ShoppingListRoom.getDatabase(context).shoppingListDao.updateThing(
-/*                id,
-                newSerial,
-                newName,
-                newCategory,
-                newQuantity,
-                newUnit*/
-                thing
-            )
+            ShoppingListRoom.getDatabase(context).shoppingListDao.updateThing(thing)
+            updateFirestoreThing(list, thing)
         } catch (ex: Exception) {
             Toast.makeText(context, ex.message, LENGTH_LONG).show()
         }

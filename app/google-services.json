@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "507654168124-44ct3f90ma42ir16tl7vsldiff12osoi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobiledeos.shoppinglist",
+            "certificate_hash": "fb67c3b08e294493313281940a78fbc37c9c037a"
+          }
+        },
+        {
           "client_id": "507654168124-74hslgkcqqcjvne04vbp6uovu71qobnm.apps.googleusercontent.com",
           "client_type": 3
         }

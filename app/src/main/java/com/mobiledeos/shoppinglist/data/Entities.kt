@@ -6,28 +6,41 @@ import java.math.BigDecimal
 
 @Entity
 data class ShoppingList (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val description: String = "",
-    val shared: Boolean = false
+    val shared: Boolean = false,
+    val ownerId: String = ""
 )
 
+@Entity(
+    primaryKeys = [
+        "userId",
+        "listId"]
+)
+data class SharedUsers (
+    val userId: String,
+    val listId: Long
+        )
+
 @Entity
-data class Users (
-    @PrimaryKey val id: String = "", // предполагается здесь будет номер телефона, может еще чего
+data class ShoppingListUser (
+    @PrimaryKey val id: String = "", // предполагается здесь будет номер телефона или еще чего
     val name: String
 ) {
-    fun getIdHash(): Int { // в firestore будет записываться это вместо id
+    fun getIdHash(): Long { // в firestore будет записываться это вместо id
         TODO("Придумать хэш функцию")
     }
 }
 
 @Entity
 data class Thing ( //элемент списка покупок
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val serial: Int = 0, // порядковый номер в списке
-    val listId: Int = 0, // shoppingList.id
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val order: Int = 0, // порядковый номер в списке
+    val listId: Long = 0, // shoppingList.id
+    val priority: Int = 1, // 0 - высший (обязательно к покупке), 1 - нормальный, 2 - минимальный
     val name: String,
+    val description: String = "",
     val category: String = "",
     val quantity: Double = 0.0,
     val unit: String = ""
@@ -35,7 +48,7 @@ data class Thing ( //элемент списка покупок
 
 @Entity
 data class Categories (
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val order: Int = 0, // порядковый номер в списке категорий
     val name: String,
     val icon: Int = 0 // иконка категории, на будущее

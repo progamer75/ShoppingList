@@ -1,7 +1,6 @@
 package com.mobiledeos.shoppinglist.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.mobiledeos.shoppinglist.data.Repository
 import com.mobiledeos.shoppinglist.data.ShoppingList
@@ -27,10 +26,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAddButton() {
         viewModelScope.launch {
-            val sl = Repository.addList(context, "Новый список")
+            val sl = Repository.addList(context, ShoppingList(name = "New list"))
         }
         refreshList() //может быть надо будет добавить LiveData в ShoppingListRoom чтобы не обновлять
     }
+
+
 }
 
 class HomeViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
