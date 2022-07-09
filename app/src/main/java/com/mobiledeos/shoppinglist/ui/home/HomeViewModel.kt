@@ -1,37 +1,63 @@
 package com.mobiledeos.shoppinglist.ui.home
 
 import android.app.Application
+import android.util.Log
+import android.view.View
 import androidx.lifecycle.*
-import com.mobiledeos.shoppinglist.data.Repository
+import androidx.navigation.findNavController
+import com.google.firebase.firestore.*
+import com.mobiledeos.shoppinglist.data.MainRepository
 import com.mobiledeos.shoppinglist.data.ShoppingList
 import kotlinx.coroutines.launch
 
-const val TAG = "HomeViewModel"
+private const val TAG = "HomeViewModel"
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
-    private val _lists = MutableLiveData<List<ShoppingList>>()
-    val lists: LiveData<List<ShoppingList>> = _lists
-
-    private val context = application
+class HomeViewModel(application: Application) : AndroidViewModel(application), EventListener<QuerySnapshot> {
+    private val _lists = MutableLiveData<MutableList<ShoppingList>>()
+    val lists: LiveData<MutableList<ShoppingList>> = _lists
+    var firestoreListener: ListenerRegistration? = null
 
     init {
-        refreshList()
+        //refreshList()
     }
 
-    fun refreshList() {
-        viewModelScope.launch {
-            _lists.value = Repository.getLists(context)
+    fun startFirestoreListening() {
+        firestoreListener = MainRepository.getListsAndSetListener(lists).addSnapshotListener(this)
+    }
+
+    fun stopFirestoreListening() {
+        if (firestoreListener != null) {
+            firestoreListener!!.remove()
+            firestoreListener = null
         }
     }
 
-    fun onAddButton() {
-        viewModelScope.launch {
-            val sl = Repository.addList(context, ShoppingList(name = "New list"))
-        }
-        refreshList() //может быть надо будет добавить LiveData в ShoppingListRoom чтобы не обновлять
+    private fun refreshList() {
+/*        viewModelScope.launch {
+            _lists.value = MainRepository.getListsAndSetListener()
+        }*/
     }
 
+    fun onAddButton(view: View) {
+        val action = HomeFragmentDirections.actionNavHomeToNavListData(null, true)
+        view.findNavController().navigate(action)
+    }
 
+    override fun onEvent(documentSnapshots: QuerySnapshot?, error: FirebaseFirestoreException?) {
+        if (error != null) {
+            Log.e(TAG, error.toString())
+            return
+        }
+
+        MainRepository.getListsAndSetListener(lists)
+/*        for (change in documentSnapshots!!.documentChanges) {
+            when (change.type) {
+                DocumentChange.Type.ADDED -> onDocumentAdded(change)
+                DocumentChange.Type.MODIFIED -> onDocumentModified(change)
+                DocumentChange.Type.REMOVED -> onDocumentRemoved(change)
+            }
+        }*/
+    }
 }
 
 class HomeViewModelFactory(private val application: Application) : ViewModelProvider.Factory {

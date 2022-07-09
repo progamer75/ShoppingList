@@ -17,6 +17,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,12 +27,18 @@ class HomeFragment : Fragment() {
         val application = requireNotNull(activity).application
         val viewModelFactory = HomeViewModelFactory(application)
 
-        val homeViewModel =
-            ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+        homeViewModel =
+            ViewModelProvider(this, viewModelFactory)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.vm = homeViewModel
         val root: View = binding.root
+        binding.lifecycleOwner = this
+/*
+        binding.addList.setOnClickListener {
+
+        }
+*/
 
         val listsAdapter = ListsAdapter()
         val listsRV = binding.listsRecyclerView
@@ -45,9 +52,17 @@ class HomeFragment : Fragment() {
             }
         })
 
-        binding.lifecycleOwner = this
-
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        homeViewModel.startFirestoreListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        homeViewModel.stopFirestoreListening()
     }
 
     override fun onDestroyView() {

@@ -19,7 +19,7 @@ class ListsAdapter: ListAdapter<ShoppingList, RecyclerView.ViewHolder>(ShoppingL
         (holder as RowViewHolder).bind(item)
     }
 
-    class RowViewHolder private constructor(val binding: ListRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class RowViewHolder private constructor(private val binding: ListRowBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ShoppingList) {
             binding.row = item
             binding.executePendingBindings()

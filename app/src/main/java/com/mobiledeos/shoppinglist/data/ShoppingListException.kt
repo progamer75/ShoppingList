@@ -5,7 +5,8 @@ enum class ShoppingListErrorCodes {
     OwnerIdIsEmpty,
     ErrorUpdatingList,
     ErrorUpdatingThing,
-    ErrorAddingUser
+    ErrorAddingUser,
+    UserAuthenticationError
 }
 
 class ShoppingListException(message: String, val code: ShoppingListErrorCodes = ShoppingListErrorCodes.Success): Exception (message)

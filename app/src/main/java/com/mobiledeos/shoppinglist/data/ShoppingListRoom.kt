@@ -1,7 +1,8 @@
 package com.mobiledeos.shoppinglist.data
-
+/*
 import android.content.Context
 import androidx.room.*
+
 
 @Dao
 interface ShoppingListDao {
@@ -29,18 +30,19 @@ interface ShoppingListDao {
     @Delete
     suspend fun deleteThing(thing: Thing)
 
+/*
     @Query("Select * from ShoppingListUser Inner join SharedUsers on ShoppingListUser.id=SharedUsers.userId and SharedUsers.listId=:listId")
     suspend fun getSharedUsers(listId: Int): List<ShoppingListUser>
+*/
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(users: ShoppingListUser)
 
     @Delete
     suspend fun deleteUser(users: ShoppingListUser)
-
 }
 
-@Database(entities = [ShoppingList::class, ShoppingListUser::class, Thing::class, Categories::class], version = 1, exportSchema = false)
+@Database(entities = [ShoppingList::class, ShoppingListUser::class, SharedUsers::class, Thing::class, Categories::class], version = 2, exportSchema = false)
 abstract class ShoppingListRoom: RoomDatabase() {
   abstract val shoppingListDao: ShoppingListDao
     companion object {
@@ -64,3 +66,5 @@ abstract class ShoppingListRoom: RoomDatabase() {
         }
     }
 }
+
+ */

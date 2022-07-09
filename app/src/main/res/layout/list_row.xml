@@ -17,7 +17,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="@{row.name}"
+            android:text="@{row.data.name}"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
     </LinearLayout>
