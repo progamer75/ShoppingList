@@ -1,14 +1,19 @@
 package com.mobiledeos.shoppinglist.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobiledeos.shoppinglist.databinding.FragmentHomeBinding
+
+private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
@@ -34,13 +39,13 @@ class HomeFragment : Fragment() {
         binding.vm = homeViewModel
         val root: View = binding.root
         binding.lifecycleOwner = this
-/*
-        binding.addList.setOnClickListener {
 
-        }
-*/
-
-        val listsAdapter = ListsAdapter()
+        val listsAdapter = ListsAdapter(
+            ListsListener { listId ->
+                val action = HomeFragmentDirections.actionNavHomeToNavListData(null, true)
+                findNavController().navigate(action)
+            }
+        )
         val listsRV = binding.listsRecyclerView
         listsRV.adapter = listsAdapter
         listsRV.layoutManager = LinearLayoutManager(activity)

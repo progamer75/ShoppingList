@@ -5,10 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-//@Entity
 @Parcelize
 data class ShoppingList (
-    //@PrimaryKey(autoGenerate = true) val id: Long = 0,
     var id: String,
     val data: ShoppingListFL
 ) : Parcelable
@@ -17,17 +15,20 @@ data class ShoppingList (
 data class ShoppingListFL (
     var name: String = "",
     var description: String = "",
-    //val shared: Boolean = false,
     var ownerId: String = "",
+    val order: Int = 0 // порядковый номер в списке
 ) : Parcelable
 
-//@Entity
 @Parcelize
 data class Thing ( //элемент списка покупок
-//    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val id: String,
+    var id: String,
+    val data: ThingFL
+): Parcelable
+
+@Parcelize
+data class ThingFL (
     val order: Int = 0, // порядковый номер в списке
-    val listId: Long = 0, // shoppingList.id
+    val listId: String = "", // shoppingList.id
     val priority: Int = 1, // 0 - высший (обязательно к покупке), 1 - нормальный, 2 - минимальный
     val name: String,
     val description: String = "",

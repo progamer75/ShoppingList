@@ -8,7 +8,10 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+
+private const val TAG = "ShoppingListFirestore"
 
 object ShoppingListFirestore {
     private const val TAG = "ShoppingListFirestore"
@@ -34,6 +37,7 @@ object ShoppingListFirestore {
     }
 
     fun addList(list: ShoppingList, userId: String) {
+        checkOwnerId(list)
         db.collection("Lists")
             .add(list.data)
             .addOnSuccessListener {
@@ -50,21 +54,23 @@ object ShoppingListFirestore {
     //db.collection("Lists").document(list.id.toString()).delete()
     }
 
-    fun updateThing(list: ShoppingList, thing: Thing) { // он же для добавления
-        checkOwnerId(list)
-        val thingData = hashMapOf(
-            "order" to thing.order,
-            "listId" to thing.listId,
-            "priority" to thing.priority,
-            "name" to thing.name,
-            "description" to thing.description,
-            "category" to thing.category,
-            "quantity" to thing.quantity,
-            "unit" to thing.unit
-        )
-        db.collection("Lists").document(list.id.toString())
-            .collection("Things").document(thing.id.toString())
-            .set(thingData)
+    fun addThing(thing: Thing) {
+        db.collection("Lists").document(thing.data.listId).collection("Things")
+            .add(thing.data)
+            .addOnSuccessListener {
+                thing.id = it.id
+            }
+            .addOnFailureListener { e ->
+                throw ShoppingListException(e.message.toString(), ShoppingListErrorCodes.ErrorUpdatingThing)
+            }
+    }
+
+    fun updateThing(thing: Thing) {
+        if(thing.id.isEmpty())
+            return
+        db.collection("Lists").document(thing.data.listId)
+            .collection("Things").document(thing.id)
+            .set(thing.data)
             .addOnFailureListener { e ->
                 throw ShoppingListException(e.message.toString(), ShoppingListErrorCodes.ErrorUpdatingThing)
             }
@@ -74,45 +80,43 @@ object ShoppingListFirestore {
         TODO("Do deleteThing")
     }
 
-/*
-    fun getListsRef(): CollectionReference {
+    fun getListsRef(userId: String): CollectionReference {
         return db.collection("Users").document(userId).collection("Lists")
     }
-*/
 
-    fun getListsAndSetListener(
+    fun fillLists(
         userId: String,
-        list: LiveData<MutableList<ShoppingList>>
-    ): CollectionReference {
-        //val list = mutableListOf<ShoppingList>()
+        list: MutableLiveData<MutableList<ShoppingList>>) {
+
         list.value?.clear()
+        val dataList = mutableListOf<ShoppingList>()
 
         val idList = mutableListOf<String>()
-        db.collection("Users").document(userId).collection("Lists")
+        getListsRef(userId)
             .get()
             .addOnSuccessListener { docs ->
                 for(doc in docs) {
                     idList.add(doc.id)
                 }
-            }
-        if(idList.size > 0)
-            db.collection("Lists")
-                .whereIn(FieldPath.documentId(), idList)
-                .limit(100) // ограничим количество списков
-                .get()
-                .addOnSuccessListener { docs ->
-                    for(doc in docs) {
-                        val data = doc.toObject(ShoppingListFL::class.java)
-                        list.value?.add(ShoppingList(
-                            doc.id,
-                            data
-                        ))
+
+                db.collection("Lists")
+                    .whereIn(FieldPath.documentId(), idList)
+                    .limit(100) // ограничим количество списков
+                    .get()
+                    .addOnSuccessListener { docs ->
+                        for(doc in docs) {
+                            val data = doc.toObject(ShoppingListFL::class.java)
+                            dataList.add(ShoppingList(
+                                doc.id,
+                                data
+                            ))
+                        }
+                        list.postValue(dataList)
                     }
-                }
-                .addOnFailureListener {
-                    ex -> Log.e(TAG, "getLists error", ex)
-                }
-        return db.collection("Users").document(userId).collection("Lists")
+                    .addOnFailureListener {
+                            ex -> Log.e(TAG, "fillLists error", ex)
+                    }
+            }
     }
 
     fun addList2User(list: ShoppingList, userId: String) {
@@ -129,5 +133,27 @@ object ShoppingListFirestore {
                 ShoppingListErrorCodes.ErrorAddingUser
             )
         }
+    }
+
+    fun getShoppingListRef(listId: String): CollectionReference {
+        return db.collection("Lists").document(listId).collection("Things")
+    }
+
+    fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
+        list.value?.clear()
+        val dataList = mutableListOf<Thing>()
+
+        getShoppingListRef(listId)
+            .get()
+            .addOnSuccessListener { docs ->
+                for(doc in docs) {
+                    val data = doc.toObject(ThingFL::class.java)
+                    dataList.add(Thing(doc.id, data))
+                }
+                list.postValue(dataList)
+            }
+            .addOnFailureListener {
+                    ex -> Log.e(TAG, "fillShoppingList error", ex)
+            }
     }
 }

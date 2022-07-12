@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_nav_shopping_list_to_nav_thing_data"
             app:destination="@id/nav_thing_data" />
+        <argument
+            android:name="shoppingList"
+            app:argType="com.mobiledeos.shoppinglist.data.ShoppingList" />
     </fragment>
 
     <fragment

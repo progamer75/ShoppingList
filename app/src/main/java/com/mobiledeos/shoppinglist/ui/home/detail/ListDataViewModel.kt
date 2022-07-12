@@ -17,18 +17,22 @@ class ListDataViewModel : ViewModel() {
         value = ""
     }
 
+    val description = MutableLiveData<String>().apply {
+        value = ""
+    }
+
     fun setName(listName: String) {
         name.value = listName
     }
 
     fun addList() {
-        val list = ShoppingList("", ShoppingListFL(name.value!!))
+        val list = ShoppingList("", ShoppingListFL(name.value!!, description.value!!))
         MainRepository.addList(list)
         done.value = true
     }
 
     fun updateList(id: String) {
-        val list = ShoppingList(id, ShoppingListFL(name.value!!))
+        val list = ShoppingList(id, ShoppingListFL(name.value!!, description.value!!))
         MainRepository.updateList(list)
         done.value = true
     }

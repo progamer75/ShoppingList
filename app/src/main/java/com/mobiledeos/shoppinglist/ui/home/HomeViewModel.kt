@@ -8,21 +8,29 @@ import androidx.navigation.findNavController
 import com.google.firebase.firestore.*
 import com.mobiledeos.shoppinglist.data.MainRepository
 import com.mobiledeos.shoppinglist.data.ShoppingList
-import kotlinx.coroutines.launch
 
 private const val TAG = "HomeViewModel"
 
 class HomeViewModel(application: Application) : AndroidViewModel(application), EventListener<QuerySnapshot> {
-    private val _lists = MutableLiveData<MutableList<ShoppingList>>()
-    val lists: LiveData<MutableList<ShoppingList>> = _lists
+    val lists = MutableLiveData<MutableList<ShoppingList>>().apply {
+        value = mutableListOf()
+    }
     var firestoreListener: ListenerRegistration? = null
 
     init {
         //refreshList()
     }
 
+    fun getListData(): String {
+        val a = lists.value
+        if(a != null)
+            if(a.size > 0)
+                return a[1].id
+        return "non"
+    }
+
     fun startFirestoreListening() {
-        firestoreListener = MainRepository.getListsAndSetListener(lists).addSnapshotListener(this)
+        firestoreListener = MainRepository.getListsRef().addSnapshotListener(this)
     }
 
     fun stopFirestoreListening() {
@@ -49,7 +57,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), E
             return
         }
 
-        MainRepository.getListsAndSetListener(lists)
+        MainRepository.fillLists(lists)
 /*        for (change in documentSnapshots!!.documentChanges) {
             when (change.type) {
                 DocumentChange.Type.ADDED -> onDocumentAdded(change)

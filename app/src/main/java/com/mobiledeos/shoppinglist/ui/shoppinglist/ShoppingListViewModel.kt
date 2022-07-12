@@ -1,13 +1,83 @@
 package com.mobiledeos.shoppinglist.ui.shoppinglist
 
-import androidx.lifecycle.LiveData
+import android.app.Application
+import android.util.Log
+import android.view.View
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
+import com.mobiledeos.shoppinglist.data.MainRepository
+import com.mobiledeos.shoppinglist.data.ShoppingList
+import com.mobiledeos.shoppinglist.data.Thing
+import com.mobiledeos.shoppinglist.ui.home.HomeFragmentDirections
+import com.mobiledeos.shoppinglist.ui.home.HomeFragmentDirections.Companion.actionNavHomeToNavListData
 
-class ShoppingListViewModel : ViewModel() {
+private const val TAG = "ShoppingListViewModel"
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+class ShoppingListViewModel(application: Application) : AndroidViewModel(application),
+    EventListener<QuerySnapshot> {
+    val list = MutableLiveData<MutableList<Thing>>().apply {
+        value = mutableListOf()
     }
-    val text: LiveData<String> = _text
+    var firestoreListener: ListenerRegistration? = null
+    val listId: String = ""
+
+    init {
+    }
+
+    fun startFirestoreListening() {
+        firestoreListener = MainRepository.getShoppingListRef(listId).addSnapshotListener(this)
+    }
+
+    fun stopFirestoreListening() {
+        if (firestoreListener != null) {
+            firestoreListener!!.remove()
+            firestoreListener = null
+        }
+    }
+
+    private fun refreshList() {
+/*        viewModelScope.launch {
+            _lists.value = MainRepository.
+        }*/
+    }
+
+    fun onAddButton(view: View) {
+/*
+        val action = ShoppingListFragmentDirections.actionNavHomeToNavListData(null, true)
+        view.findNavController().navigate(action)
+*/
+    }
+
+    override fun onEvent(documentSnapshots: QuerySnapshot?, error: FirebaseFirestoreException?) {
+        if (error != null) {
+            Log.e(TAG, error.toString())
+            return
+        }
+
+        MainRepository.fillShoppingList(listId, list)
+/*        for (change in documentSnapshots!!.documentChanges) {
+            when (change.type) {
+                DocumentChange.Type.ADDED -> onDocumentAdded(change)
+                DocumentChange.Type.MODIFIED -> onDocumentModified(change)
+                DocumentChange.Type.REMOVED -> onDocumentRemoved(change)
+            }
+        }*/
+    }
+}
+
+class ShoppingListViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ShoppingListViewModel::class.java)) {
+            return ShoppingListViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

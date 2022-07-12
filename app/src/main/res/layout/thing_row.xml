@@ -5,18 +5,13 @@
     <data>
         <variable
             name="row"
-            type="com.mobiledeos.shoppinglist.data.ShoppingList" />
-        <variable
-            name="clickListener"
-            type="com.mobiledeos.shoppinglist.ui.home.ListsListener" />
+            type="com.mobiledeos.shoppinglist.data.Thing" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:onClick="@{()->clickListener.onClick(row)}"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:text="@{row.data.name}"
@@ -26,6 +21,18 @@
             />
         <TextView
             android:text="@{row.data.description}"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:text="@{row.data.quantity}"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:text="@{row.data.unit}"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="12sp"

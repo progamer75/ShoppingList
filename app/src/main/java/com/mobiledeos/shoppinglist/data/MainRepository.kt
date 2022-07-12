@@ -1,7 +1,7 @@
 package com.mobiledeos.shoppinglist.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 
@@ -22,18 +22,15 @@ object MainRepository {
      * @return возвращает ShoppingList или null, если возникла ошибка.
      */
     fun addList(list: ShoppingList) {
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.addList(list)
         list.data.ownerId = checkUserAuth()
         ShoppingListFirestore.addList(list, checkUserAuth())
     }
 
     fun deleteList(list: ShoppingList) {
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.deleteList(list)
         ShoppingListFirestore.deleteList(list)
     }
 
     fun updateList(list: ShoppingList) {
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.updateList(list)
         ShoppingListFirestore.updateList(list)
     }
 
@@ -42,34 +39,34 @@ object MainRepository {
      * Возвращает в list список всех shoppingList.
      *
      */
-    fun getListsAndSetListener(list: LiveData<MutableList<ShoppingList>>): CollectionReference {
-        return ShoppingListFirestore.getListsAndSetListener(checkUserAuth(), list)
+    fun fillLists(list: MutableLiveData<MutableList<ShoppingList>>) {
+        ShoppingListFirestore.fillLists(checkUserAuth(), list)
+    }
+
+    fun getListsRef(): CollectionReference {
+        return ShoppingListFirestore.getListsRef(checkUserAuth())
     }
 
     //
     // ShoppingList
     //
-    fun addThing(list: ShoppingList, thing: Thing) {
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.addThing(thing)
-        updateFirestoreThing(list, thing)
+    fun addThing(thing: Thing) {
+        ShoppingListFirestore.addThing(thing)
     }
 
-    private fun updateFirestoreThing(list: ShoppingList, thing: Thing) {
-        ShoppingListFirestore.updateThing(list, thing)
+    private fun updateThing(thing: Thing) {
+        ShoppingListFirestore.updateThing(thing)
     }
 
     fun deleteThing(thing: Thing) {
         TODO("DO deleteThing")
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.deleteThing(thing)
     }
 
-    fun updateThing(list: ShoppingList, thing: Thing) {
-        //ShoppingListRoom.getDatabase(context).shoppingListDao.updateThing(thing)
-        updateFirestoreThing(list, thing)
+    fun getShoppingListRef(listId: String): CollectionReference {
+        return ShoppingListFirestore.getShoppingListRef(listId)
     }
 
-    fun getShoppingList(listId: Int): List<Thing> {
-        TODO("DO getShoppingList")
-            //ShoppingListRoom.getDatabase(context).shoppingListDao.getThingList(listId)
+    fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
+        ShoppingListFirestore.fillShoppingList(listId, list)
     }
 }
