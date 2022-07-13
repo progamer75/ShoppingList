@@ -3,15 +3,34 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/activity_login.xml" value="0.5380208333333333" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/account_75.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/ic_check_24.xml" value="0.246" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.137" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/menu_home.xml" value="0.246" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/drawable/menu_notes.xml" value="0.246" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/activity_login.xml" value="0.27447916666666666" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/content_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/nav_header_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_list_data.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_shopping_list.xml" value="0.1265625" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/fragment_thing_data.xml" value="0.27447916666666666" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/list_row.xml" value="0.22435897435897437" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/nav_header_main.xml" value="0.1" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/layout/thing_row.xml" value="0.2734375" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu-v26/list_data_menu.xml" value="0.27447916666666666" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/activity_main_drawer.xml" value="0.27447916666666666" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/list_data_menu.xml" value="0.27447916666666666" />
         <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/menu/main.xml" value="0.27447916666666666" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.137" />
+        <entry key="..\:/StudioProjects/ShoppingList/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.137" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">ShoppingList</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_shopping_list">List</string>
+    <string name="menu_home">Main</string>
+    <string name="menu_shopping_list">My Lists</string>
+    <string name="user_name">User</string>
+    <string name="web_client_id">507654168124-74hslgkcqqcjvne04vbp6uovu71qobnm.apps.googleusercontent.com</string>
+    <string name="login_unsuccessful_msg">Invalid authentication</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>

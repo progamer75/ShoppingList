@@ -8,13 +8,51 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.mobiledeos.shoppinglist.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/menu_shopping_list"
+        tools:layout="@layout/fragment_home"
+        >
+        <action
+            android:id="@+id/action_nav_home_to_nav_list_data"
+            app:destination="@id/nav_list_data"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_shopping_list"
+            app:destination="@id/nav_shopping_list" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_shopping_list"
         android:name="com.mobiledeos.shoppinglist.ui.shoppinglist.ShoppingListFragment"
-        android:label="@string/menu_shopping_list"
-        tools:layout="@layout/fragment_shopping_list" />
+        tools:layout="@layout/fragment_shopping_list"
+    >
+        <action
+            android:id="@+id/action_nav_shopping_list_to_nav_thing_data"
+            app:destination="@id/nav_thing_data" />
+        <argument
+            android:name="shoppingList"
+            app:argType="com.mobiledeos.shoppinglist.data.ShoppingList" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_list_data"
+        android:name="com.mobiledeos.shoppinglist.ui.home.detail.ListDataFragment"
+        tools:layout="@layout/fragment_list_data"
+        >
+        <argument
+            android:name="list"
+            app:argType="com.mobiledeos.shoppinglist.data.ShoppingList"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="newList"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_thing_data"
+        android:name="com.mobiledeos.shoppinglist.ui.shoppinglist.detail.ThingDataFragment"
+        tools:layout="@layout/fragment_thing_data"
+        />
 
 </navigation>

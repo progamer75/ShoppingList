@@ -11,6 +11,10 @@
         android:theme="@style/Theme.ShoppingList">
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ShoppingList.NoActionBar"/>
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ShoppingList.NoActionBar">
