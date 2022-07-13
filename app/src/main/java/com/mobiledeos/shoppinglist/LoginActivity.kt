@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LiveData
@@ -22,8 +23,9 @@ import com.google.firebase.ktx.Firebase
 import com.mobiledeos.shoppinglist.databinding.ActivityLoginBinding
 import com.mobiledeos.shoppinglist.databinding.ActivityMainBinding
 
+private const val TAG = "UserAuth"
+
 class LoginActivity : AppCompatActivity() {
-    private val TAG = "UserAuth"
     private val RC_SIGN_IN = 9001
 
     lateinit var auth: FirebaseAuth
@@ -51,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                     firebaseAuthWithGoogle(this, account.idToken!!)
                 }
             } catch (e: ApiException) {
-                e.message?.let { it1 -> Log.e(com.mobiledeos.shoppinglist.TAG, it1) }
+                e.message?.let { it1 -> Log.e(TAG, "!!!!$it1") }
             }
         }
     }
@@ -77,9 +79,11 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
+                    Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
                     startActivity(Intent(this, MainActivity::class.java))
                 } else {
-                    Log.w(com.mobiledeos.shoppinglist.TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                 }
             }
     }

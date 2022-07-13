@@ -19,7 +19,7 @@ class ListDataFragment : Fragment() {
     private var _binding: FragmentListDataBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ListDataViewModel
-    val args: ListDataFragmentArgs by navArgs()
+    private val args: ListDataFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

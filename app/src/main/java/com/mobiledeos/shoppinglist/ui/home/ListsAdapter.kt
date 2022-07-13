@@ -17,7 +17,6 @@ class ListsAdapter(val clickListener: ListsListener): ListAdapter<ShoppingList, 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         (holder as RowViewHolder).bind(item, clickListener)
-
     }
 
     class RowViewHolder private constructor(private val binding: ListRowBinding): RecyclerView.ViewHolder(binding.root) {
@@ -48,6 +47,6 @@ class ShoppingListDiffCallback : DiffUtil.ItemCallback<ShoppingList>() {
     }
 }
 
-class ListsListener(val clickListener: (listId: String) -> Unit) {
-    fun onClick(shoppingList: ShoppingList) = clickListener(shoppingList.id)
+class ListsListener(val clickListener: (shoppingList: ShoppingList) -> Unit) {
+    fun onClick(shoppingList: ShoppingList) = clickListener(shoppingList)
 }

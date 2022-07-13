@@ -4,20 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobiledeos.shoppinglist.databinding.FragmentShoppingListBinding
+import com.mobiledeos.shoppinglist.ui.home.detail.ListDataFragmentArgs
 
 private const val TAG = "ShoppingListFragment"
 
 class ShoppingListFragment : Fragment() {
-
     private var _binding: FragmentShoppingListBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     lateinit var shoppingListViewModel: ShoppingListViewModel
 
@@ -26,8 +25,11 @@ class ShoppingListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val args: ShoppingListFragmentArgs by navArgs()
+        val shoppingList = args.shoppingList
+
         val application = requireNotNull(activity).application
-        val viewModelFactory = ShoppingListViewModelFactory(application)
+        val viewModelFactory = ShoppingListViewModelFactory(shoppingList, application)
 
         shoppingListViewModel =
             ViewModelProvider(this, viewModelFactory)[ShoppingListViewModel::class.java]

@@ -20,19 +20,15 @@ import com.mobiledeos.shoppinglist.ui.home.HomeFragmentDirections.Companion.acti
 
 private const val TAG = "ShoppingListViewModel"
 
-class ShoppingListViewModel(application: Application) : AndroidViewModel(application),
+class ShoppingListViewModel(val shoppingList: ShoppingList, application: Application) : AndroidViewModel(application),
     EventListener<QuerySnapshot> {
     val list = MutableLiveData<MutableList<Thing>>().apply {
         value = mutableListOf()
     }
     var firestoreListener: ListenerRegistration? = null
-    val listId: String = ""
-
-    init {
-    }
 
     fun startFirestoreListening() {
-        firestoreListener = MainRepository.getShoppingListRef(listId).addSnapshotListener(this)
+        firestoreListener = MainRepository.getShoppingListRef(shoppingList.id).addSnapshotListener(this)
     }
 
     fun stopFirestoreListening() {
@@ -40,12 +36,6 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
             firestoreListener!!.remove()
             firestoreListener = null
         }
-    }
-
-    private fun refreshList() {
-/*        viewModelScope.launch {
-            _lists.value = MainRepository.
-        }*/
     }
 
     fun onAddButton(view: View) {
@@ -61,7 +51,7 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
             return
         }
 
-        MainRepository.fillShoppingList(listId, list)
+        MainRepository.fillShoppingList(shoppingList.id, list)
 /*        for (change in documentSnapshots!!.documentChanges) {
             when (change.type) {
                 DocumentChange.Type.ADDED -> onDocumentAdded(change)
@@ -72,11 +62,11 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
     }
 }
 
-class ShoppingListViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+class ShoppingListViewModelFactory(val shoppingList: ShoppingList, private val application: Application) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShoppingListViewModel::class.java)) {
-            return ShoppingListViewModel(application) as T
+            return ShoppingListViewModel(shoppingList, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
