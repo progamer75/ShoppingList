@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.mobiledeos.shoppinglist.ui.home.HomeFragment"
-        android:label="@string/menu_shopping_list"
         tools:layout="@layout/fragment_home"
         >
         <action
@@ -53,6 +52,20 @@
         android:id="@+id/nav_thing_data"
         android:name="com.mobiledeos.shoppinglist.ui.shoppinglist.detail.ThingDataFragment"
         tools:layout="@layout/fragment_thing_data"
-        />
+        >
+        <argument
+            android:name="thing"
+            app:argType="com.mobiledeos.shoppinglist.data.Thing"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="shoppingListId"
+            app:argType="string" />
+        <argument
+            android:name="newThing"
+            app:argType="boolean"
+            android:defaultValue="false" />
+
+    </fragment>
 
 </navigation>

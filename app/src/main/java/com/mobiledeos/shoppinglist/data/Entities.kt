@@ -27,14 +27,15 @@ data class Thing ( //элемент списка покупок
 
 @Parcelize
 data class ThingFL (
-    val order: Int = 0, // порядковый номер в списке
-    val listId: String = "", // shoppingList.id
-    val priority: Int = 1, // 0 - высший (обязательно к покупке), 1 - нормальный, 2 - минимальный
-    val name: String,
-    val description: String = "",
-    val category: String = "",
-    val quantity: Double = 0.0,
-    val unit: String = ""
+    var done: Boolean = false,
+    var order: Int = 0, // порядковый номер в списке
+    var listId: String = "", // shoppingList.id
+    var priority: Int = 1, // 0 - высший (обязательно к покупке), 1 - нормальный, 2 - минимальный
+    var name: String = "",
+    var description: String = "",
+    var category: String = "",
+    var quantity: String = "",
+    //var unit: String = ""
 ) : Parcelable
 
 //@Entity

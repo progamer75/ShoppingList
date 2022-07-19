@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,7 +18,7 @@ import com.mobiledeos.shoppinglist.data.ShoppingListErrorCodes
 import com.mobiledeos.shoppinglist.data.ShoppingListException
 import com.mobiledeos.shoppinglist.databinding.FragmentListDataBinding
 
-class ListDataFragment : Fragment() {
+class ListDataFragment : Fragment(), MenuProvider {
     private var _binding: FragmentListDataBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ListDataViewModel
@@ -23,7 +26,7 @@ class ListDataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        //setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -42,6 +45,9 @@ class ListDataFragment : Fragment() {
                 NavHostFragment.findNavController(this).popBackStack()
         })
 
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
 /*
         val navHostFragment = NavHostFragment.findNavController(this)
         NavigationUI.setupWithNavController(binding.listDataToolbar, navHostFragment)
@@ -52,23 +58,18 @@ class ListDataFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.list_data_menu, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.list_data_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.save_data) {
             if(args.newList)
                 viewModel.addList()
             else
-                if(args.list == null)
-                    throw ShoppingListException("Update list error", ShoppingListErrorCodes.ErrorUpdatingList)
-                else
-                    viewModel.updateList(args.list!!.id)
+                viewModel.updateList(args.list!!.id)
         }
-
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onStart() {

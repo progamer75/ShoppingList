@@ -61,13 +61,13 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         homeViewModel.startFirestoreListening()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         homeViewModel.stopFirestoreListening()
     }
 

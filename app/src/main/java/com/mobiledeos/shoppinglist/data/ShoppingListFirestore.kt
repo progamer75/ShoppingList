@@ -10,6 +10,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private const val TAG = "ShoppingListFirestore"
 
@@ -84,7 +86,7 @@ object ShoppingListFirestore {
         return db.collection("Users").document(userId).collection("Lists")
     }
 
-    fun fillLists(
+    suspend fun fillLists(
         userId: String,
         list: MutableLiveData<MutableList<ShoppingList>>) {
 
@@ -92,31 +94,38 @@ object ShoppingListFirestore {
         val dataList = mutableListOf<ShoppingList>()
 
         val idList = mutableListOf<String>()
-        getListsRef(userId)
-            .get()
-            .addOnSuccessListener { docs ->
-                for(doc in docs) {
-                    idList.add(doc.id)
-                }
+        withContext(Dispatchers.IO) {
+            getListsRef(userId)
+                .get()
+                .addOnSuccessListener { docs ->
+                    for(doc in docs) {
+                        idList.add(doc.id)
+                    }
 
-                db.collection("Lists")
-                    .whereIn(FieldPath.documentId(), idList)
-                    .limit(100) // ограничим количество списков
-                    .get()
-                    .addOnSuccessListener { docs ->
-                        for(doc in docs) {
-                            val data = doc.toObject(ShoppingListFL::class.java)
-                            dataList.add(ShoppingList(
-                                doc.id,
-                                data
-                            ))
-                        }
+                    if(idList.isEmpty()) {
                         list.postValue(dataList)
+                        return@addOnSuccessListener
                     }
-                    .addOnFailureListener {
-                            ex -> Log.e(TAG, "fillLists error", ex)
-                    }
-            }
+
+                    db.collection("Lists")
+                        .whereIn(FieldPath.documentId(), idList)
+                        .limit(100) // ограничим количество списков
+                        .get()
+                        .addOnSuccessListener { docs ->
+                            for(doc in docs) {
+                                val data = doc.toObject(ShoppingListFL::class.java)
+                                dataList.add(ShoppingList(
+                                    doc.id,
+                                    data
+                                ))
+                            }
+                            list.postValue(dataList)
+                        }
+                        .addOnFailureListener {
+                                ex -> Log.e(TAG, "fillLists error", ex)
+                        }
+                }
+        }
     }
 
     fun addList2User(list: ShoppingList, userId: String) {
@@ -139,21 +148,22 @@ object ShoppingListFirestore {
         return db.collection("Lists").document(listId).collection("Things")
     }
 
-    fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
+    suspend fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
         list.value?.clear()
         val dataList = mutableListOf<Thing>()
-
-        getShoppingListRef(listId)
-            .get()
-            .addOnSuccessListener { docs ->
-                for(doc in docs) {
-                    val data = doc.toObject(ThingFL::class.java)
-                    dataList.add(Thing(doc.id, data))
+        withContext(Dispatchers.IO) {
+            getShoppingListRef(listId)
+                .get()
+                .addOnSuccessListener { docs ->
+                    for(doc in docs) {
+                        val data = doc.toObject(ThingFL::class.java)
+                        dataList.add(Thing(doc.id, data))
+                    }
+                    list.postValue(dataList)
                 }
-                list.postValue(dataList)
-            }
-            .addOnFailureListener {
-                    ex -> Log.e(TAG, "fillShoppingList error", ex)
-            }
+                .addOnFailureListener {
+                        ex -> Log.e(TAG, "fillShoppingList error", ex)
+                }
+        }
     }
 }

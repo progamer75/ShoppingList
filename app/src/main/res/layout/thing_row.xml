@@ -6,36 +6,67 @@
         <variable
             name="row"
             type="com.mobiledeos.shoppinglist.data.Thing" />
+        <variable
+            name="clickListener"
+            type="com.mobiledeos.shoppinglist.ui.shoppinglist.ThingsListener" />
+        <variable
+            name="checkedChangeListener"
+            type="com.mobiledeos.shoppinglist.ui.shoppinglist.CheckListener" />
     </data>
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:text="@{row.data.name}"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="16sp"
-            />
-        <TextView
-            android:text="@{row.data.description}"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="12sp"
-            />
-        <TextView
-            android:text="@{row.data.quantity}"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="12sp"
-            />
-        <TextView
-            android:text="@{row.data.unit}"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="12sp"
-            />
-    </LinearLayout>
+        android:clickable="true"
+        android:focusable="true"
+        android:checkable="true"
+        app:cardElevation="1dp"
+        android:layout_margin="8dp"
+        android:minHeight="48dp"
+        android:onClick="@{()->clickListener.onClick(row)}"
+    >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <CheckBox
+                android:id="@+id/check_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/sl_check_icon_24dp"
+                app:buttonTint="@android:color/black"
+                android:minHeight="48dp"
+                android:checked="@{row.data.done}"
+                android:onCheckedChanged="@{(view, cheked)->checkedChangeListener.onCheckedChangeListener(row, view, cheked)}"
+                />
+            <TextView
+                android:id="@+id/thing_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_icon"
+                android:text="@{row.data.name + ' ' + row.data.quantity}"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="20sp"
+                />
+<!--            <TextView
+                android:hint="quantity"
+                android:text="@{row.data.quantity}"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                />-->
+            <TextView
+                android:id="@+id/thing_description"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@{row.data.description}"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_icon"
+                app:layout_constraintTop_toBottomOf="@+id/thing_name" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

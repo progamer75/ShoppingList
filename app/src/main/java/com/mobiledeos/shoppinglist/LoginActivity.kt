@@ -80,7 +80,9 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -98,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-class FirebaseUserLiveData: LiveData<FirebaseUser?>() {
+/*class FirebaseUserLiveData: LiveData<FirebaseUser?>() {
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     private val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
@@ -116,7 +118,7 @@ class FirebaseUserLiveData: LiveData<FirebaseUser?>() {
     override fun onInactive() {
         firebaseAuth.removeAuthStateListener(authStateListener)
     }
-}
+}*/
 
 /*
     enum class AuthenticationState {

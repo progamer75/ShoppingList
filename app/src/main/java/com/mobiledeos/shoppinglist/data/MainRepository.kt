@@ -39,7 +39,7 @@ object MainRepository {
      * Возвращает в list список всех shoppingList.
      *
      */
-    fun fillLists(list: MutableLiveData<MutableList<ShoppingList>>) {
+    suspend fun fillLists(list: MutableLiveData<MutableList<ShoppingList>>) {
         ShoppingListFirestore.fillLists(checkUserAuth(), list)
     }
 
@@ -51,10 +51,14 @@ object MainRepository {
     // ShoppingList
     //
     fun addThing(thing: Thing) {
+        if(thing.data.listId.isEmpty())
+            throw ShoppingListException("addThing error", ShoppingListErrorCodes.ErrorUpdatingThing)
         ShoppingListFirestore.addThing(thing)
     }
 
-    private fun updateThing(thing: Thing) {
+    fun updateThing(thing: Thing) {
+        if(thing.data.listId.isEmpty())
+            throw ShoppingListException("addThing error", ShoppingListErrorCodes.ErrorUpdatingThing)
         ShoppingListFirestore.updateThing(thing)
     }
 
@@ -66,7 +70,7 @@ object MainRepository {
         return ShoppingListFirestore.getShoppingListRef(listId)
     }
 
-    fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
+    suspend fun fillShoppingList(listId: String, list: MutableLiveData<MutableList<Thing>>) {
         ShoppingListFirestore.fillShoppingList(listId, list)
     }
 }

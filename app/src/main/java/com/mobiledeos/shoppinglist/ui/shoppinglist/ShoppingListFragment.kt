@@ -1,17 +1,22 @@
 package com.mobiledeos.shoppinglist.ui.shoppinglist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobiledeos.shoppinglist.R
+import com.mobiledeos.shoppinglist.data.ShoppingList
 import com.mobiledeos.shoppinglist.databinding.FragmentShoppingListBinding
-import com.mobiledeos.shoppinglist.ui.home.detail.ListDataFragmentArgs
+
 
 private const val TAG = "ShoppingListFragment"
 
@@ -39,14 +44,23 @@ class ShoppingListFragment : Fragment() {
         val root: View = binding.root
         binding.lifecycleOwner = this
 
-        val listAdapter = ShoppingListAdapter()
+        val listAdapter = ShoppingListAdapter(
+            ThingsListener{ thing ->
+                val action = ShoppingListFragmentDirections.actionNavShoppingListToNavThingData(
+                    shoppingListId = shoppingList.id, thing = thing, newThing = false)
+                findNavController().navigate(action)
+            },
+            CheckListener{ thing, _, check ->
+                shoppingListViewModel.setCheck(thing, check)
+            }
+        )
         val listRV = binding.listRecyclerView
         listRV.adapter = listAdapter
         listRV.layoutManager = LinearLayoutManager(activity)
-        //listsRV.addItemDecoration(ListsItemDecoration())
 
         shoppingListViewModel.list.observe(viewLifecycleOwner, Observer {
             it?.let{
+                Log.i(TAG, "dddddddd")
                 listAdapter.submitList(it)
             }
         })
@@ -54,13 +68,13 @@ class ShoppingListFragment : Fragment() {
         return root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         shoppingListViewModel.startFirestoreListening()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         shoppingListViewModel.stopFirestoreListening()
     }
 
