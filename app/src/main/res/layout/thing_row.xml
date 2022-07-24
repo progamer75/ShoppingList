@@ -7,8 +7,8 @@
             name="row"
             type="com.mobiledeos.shoppinglist.data.Thing" />
         <variable
-            name="clickListener"
-            type="com.mobiledeos.shoppinglist.ui.shoppinglist.ThingsListener" />
+            name="listener"
+            type="com.mobiledeos.shoppinglist.ui.InteractionListeners" />
         <variable
             name="checkedChangeListener"
             type="com.mobiledeos.shoppinglist.ui.shoppinglist.CheckListener" />
@@ -23,7 +23,7 @@
         app:cardElevation="1dp"
         android:layout_margin="8dp"
         android:minHeight="48dp"
-        android:onClick="@{()->clickListener.onClick(row)}"
+        android:onClick="@{()->listener.onClick(row)}"
     >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

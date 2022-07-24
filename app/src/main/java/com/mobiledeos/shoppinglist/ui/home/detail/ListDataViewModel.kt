@@ -1,39 +1,41 @@
 package com.mobiledeos.shoppinglist.ui.home.detail
 
-import androidx.databinding.BaseObservable
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.mobiledeos.shoppinglist.data.MainRepository
 import com.mobiledeos.shoppinglist.data.ShoppingList
-import com.mobiledeos.shoppinglist.data.ShoppingListFL
 
-class ListDataViewModel : ViewModel() {
+class ListDataViewModel(private val _list: ShoppingList?) : ViewModel() {
     val done = MutableLiveData<Boolean>().apply {
         value = false
     }
 
-    val name = MutableLiveData<String>().apply {
-        value = ""
-    }
-
-    val description = MutableLiveData<String>().apply {
-        value = ""
+    var list = MutableLiveData<ShoppingList>().apply {
+        value = _list
     }
 
     fun setName(listName: String) {
-        name.value = listName
+        _list?.data?.name = listName
     }
 
     fun addList() {
-        val list = ShoppingList("", ShoppingListFL(name.value!!, description.value!!))
-        MainRepository.addList(list)
+        MainRepository.addList(_list!!)
         done.value = true
     }
 
-    fun updateList(id: String) {
-        val list = ShoppingList(id, ShoppingListFL(name.value!!, description.value!!))
-        MainRepository.updateList(list)
+    fun updateList() {
+        MainRepository.updateList(_list!!)
         done.value = true
+    }
+}
+
+class ListViewModelFactory(private val list: ShoppingList?) : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ListDataViewModel::class.java)) {
+            return ListDataViewModel(list) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

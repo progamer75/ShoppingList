@@ -8,22 +8,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobiledeos.shoppinglist.R
 import com.mobiledeos.shoppinglist.data.ShoppingList
+import com.mobiledeos.shoppinglist.data.Thing
 import com.mobiledeos.shoppinglist.databinding.FragmentShoppingListBinding
+import com.mobiledeos.shoppinglist.ui.InteractionListeners
 
 
 private const val TAG = "ShoppingListFragment"
 
-class ShoppingListFragment : Fragment() {
+class ShoppingListFragment : Fragment(), InteractionListeners<Thing> {
     private var _binding: FragmentShoppingListBinding? = null
     private val binding get() = _binding!!
     lateinit var shoppingListViewModel: ShoppingListViewModel
+    lateinit var shoppingList: ShoppingList
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +36,7 @@ class ShoppingListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val args: ShoppingListFragmentArgs by navArgs()
-        val shoppingList = args.shoppingList
+        shoppingList = args.shoppingList
 
         val application = requireNotNull(activity).application
         val viewModelFactory = ShoppingListViewModelFactory(shoppingList, application)
@@ -40,16 +45,11 @@ class ShoppingListFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory)[ShoppingListViewModel::class.java]
 
         _binding = FragmentShoppingListBinding.inflate(inflater, container, false)
-        binding.vm = shoppingListViewModel
+        binding.frag = this
         val root: View = binding.root
         binding.lifecycleOwner = this
 
-        val listAdapter = ShoppingListAdapter(
-            ThingsListener{ thing ->
-                val action = ShoppingListFragmentDirections.actionNavShoppingListToNavThingData(
-                    shoppingListId = shoppingList.id, thing = thing, newThing = false)
-                findNavController().navigate(action)
-            },
+        val listAdapter = ShoppingListAdapter(this,
             CheckListener{ thing, _, check ->
                 shoppingListViewModel.setCheck(thing, check)
             }
@@ -60,12 +60,18 @@ class ShoppingListFragment : Fragment() {
 
         shoppingListViewModel.list.observe(viewLifecycleOwner, Observer {
             it?.let{
-                Log.i(TAG, "dddddddd")
+                Log.i(TAG, "submit")
                 listAdapter.submitList(it)
             }
         })
 
         return root
+    }
+
+    fun onAddButton(view: View) {
+        val action = ShoppingListFragmentDirections.actionNavShoppingListToNavThingData(
+            shoppingListId = shoppingList.id, thing = null, newThing = true)
+        view.findNavController().navigate(action)
     }
 
     override fun onResume() {
@@ -81,5 +87,15 @@ class ShoppingListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(thing: Thing) {
+        val action = ShoppingListFragmentDirections.actionNavShoppingListToNavThingData(
+            shoppingListId = shoppingList.id, thing = thing, newThing = false)
+        findNavController().navigate(action)
+    }
+
+    override fun onLongClick(thing: Thing): Boolean {
+        TODO("Not yet implemented")
     }
 }

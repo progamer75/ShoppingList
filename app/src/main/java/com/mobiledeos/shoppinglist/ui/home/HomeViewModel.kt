@@ -8,6 +8,9 @@ import androidx.navigation.findNavController
 import com.google.firebase.firestore.*
 import com.mobiledeos.shoppinglist.data.MainRepository
 import com.mobiledeos.shoppinglist.data.ShoppingList
+import com.mobiledeos.shoppinglist.data.ShoppingListFL
+import com.mobiledeos.shoppinglist.data.Thing
+import com.mobiledeos.shoppinglist.forceRefresh
 import kotlinx.coroutines.launch
 
 private const val TAG = "HomeViewModel"
@@ -19,7 +22,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), E
     var firestoreListener: ListenerRegistration? = null
 
     fun startFirestoreListening() {
-        lists.value?.clear()
+        viewModelScope.launch {
+            MainRepository.fillLists(lists)
+        }
         firestoreListener = MainRepository.getListsRef().addSnapshotListener(this)
     }
 
@@ -30,27 +35,32 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), E
         }
     }
 
-    fun onAddButton(view: View) {
-        val action = HomeFragmentDirections.actionNavHomeToNavListData(null, true)
-        view.findNavController().navigate(action)
-    }
-
     override fun onEvent(documentSnapshots: QuerySnapshot?, error: FirebaseFirestoreException?) {
         if (error != null) {
             Log.e(TAG, error.toString())
             return
         }
 
-        viewModelScope.launch {
-            MainRepository.fillLists(lists)
-        }
-/*        for (change in documentSnapshots!!.documentChanges) {
+        for (change in documentSnapshots!!.documentChanges) {
+            val doc = change.document
+            val id = doc.id
+            val data = doc.toObject(ShoppingListFL::class.java)
             when (change.type) {
-                DocumentChange.Type.ADDED -> onDocumentAdded(change)
-                DocumentChange.Type.MODIFIED -> onDocumentModified(change)
-                DocumentChange.Type.REMOVED -> onDocumentRemoved(change)
+                DocumentChange.Type.ADDED -> {
+                    lists.value?.add(ShoppingList(id, data))
+                }
+                DocumentChange.Type.MODIFIED -> {
+                }
+                DocumentChange.Type.REMOVED -> {
+                    val sl = lists.value?.find {
+                        it.id == id
+                    }
+                    if(sl != null)
+                        lists.value?.remove(sl)
+                }
             }
-        }*/
+        }
+        lists.forceRefresh()
     }
 }
 

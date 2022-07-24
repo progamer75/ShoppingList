@@ -22,7 +22,7 @@
             android:inputType="text"
             android:minHeight="48dp"
             android:hint="List name"
-            android:text="@={vm.name}"
+            android:text="@={vm.list.data.name}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +33,7 @@
             android:inputType="text"
             android:minHeight="48dp"
             android:hint="Description"
-            android:text="@={vm.description}"
+            android:text="@={vm.list.data.description}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editName" />
 

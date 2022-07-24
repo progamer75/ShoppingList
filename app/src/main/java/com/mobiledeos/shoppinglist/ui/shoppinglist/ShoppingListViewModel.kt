@@ -2,14 +2,13 @@ package com.mobiledeos.shoppinglist.ui.shoppinglist
 
 import android.app.Application
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.*
-import androidx.navigation.findNavController
 import com.google.firebase.firestore.*
 import com.mobiledeos.shoppinglist.data.MainRepository
 import com.mobiledeos.shoppinglist.data.ShoppingList
 import com.mobiledeos.shoppinglist.data.Thing
 import com.mobiledeos.shoppinglist.data.ThingFL
+import com.mobiledeos.shoppinglist.forceRefresh
 import kotlinx.coroutines.launch
 
 private const val TAG = "ShoppingListViewModel"
@@ -35,12 +34,6 @@ class ShoppingListViewModel(val shoppingList: ShoppingList, application: Applica
         }
     }
 
-    fun onAddButton(view: View) {
-        val action = ShoppingListFragmentDirections.actionNavShoppingListToNavThingData(
-            shoppingListId = shoppingList.id, thing = null, newThing = true)
-        view.findNavController().navigate(action)
-    }
-
     override fun onEvent(documentSnapshots: QuerySnapshot?, error: FirebaseFirestoreException?) {
         if (error != null) {
             Log.e(TAG, error.toString())
@@ -56,12 +49,18 @@ class ShoppingListViewModel(val shoppingList: ShoppingList, application: Applica
                     list.value?.add(Thing(id, data))
                 }
                 DocumentChange.Type.MODIFIED -> {
-
                 }
-                DocumentChange.Type.REMOVED -> {}
+                DocumentChange.Type.REMOVED -> {
+                    val thing = list.value?.find {
+                        it.id == id
+                    }
+                    if(thing != null)
+                        list.value?.remove(thing)
+                }
             }
         }
-        Log.i(TAG, "Changed")
+        Log.i(TAG, "refresh")
+        list.forceRefresh()
     }
 
     fun setCheck(thing: Thing, check: Boolean) {

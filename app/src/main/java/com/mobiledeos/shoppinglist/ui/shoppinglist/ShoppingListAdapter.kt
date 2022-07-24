@@ -1,22 +1,18 @@
 package com.mobiledeos.shoppinglist.ui.shoppinglist
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.RadioGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mobiledeos.shoppinglist.data.ShoppingList
 import com.mobiledeos.shoppinglist.data.Thing
-import com.mobiledeos.shoppinglist.databinding.ListRowBinding
 import com.mobiledeos.shoppinglist.databinding.ThingRowBinding
-import com.mobiledeos.shoppinglist.ui.home.ListsListener
+import com.mobiledeos.shoppinglist.ui.InteractionListeners
 
 class ShoppingListAdapter(
-    val clickListener: ThingsListener,
-    val chekedChangeListener: CheckListener,
+    private val listeners: InteractionListeners<Thing>,
+    private val checkedChangeListener: CheckListener,
     ) : ListAdapter<Thing, RecyclerView.ViewHolder>(ThingListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,15 +21,15 @@ class ShoppingListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        (holder as RowViewHolder).bind(item, clickListener, chekedChangeListener)
+        (holder as RowViewHolder).bind(item, listeners, checkedChangeListener)
     }
 
     class RowViewHolder
         private constructor(private val binding: ThingRowBinding): RecyclerView.ViewHolder(binding.root) {
-            fun bind(item: Thing, clickListener: ThingsListener, chekedChangeListener: CheckListener) {
+            fun bind(item: Thing, listeners: InteractionListeners<Thing>, checkedChangeListener: CheckListener) {
                 binding.row = item
-                binding.clickListener = clickListener
-                binding.checkedChangeListener = chekedChangeListener
+                binding.listener = listeners
+                binding.checkedChangeListener = checkedChangeListener
                 binding.executePendingBindings()
             }
 
@@ -53,14 +49,8 @@ class ThingListDiffCallback : DiffUtil.ItemCallback<Thing>() {
     }
 
     override fun areContentsTheSame(oldItem: Thing, newItem: Thing): Boolean {
-        return false//(oldItem.data == newItem.data)
+        return false//oldItem.data == newItem.data
     }
-}
-
-class ThingsListener(
-    val clickListener: (thing: Thing) -> Unit
-) {
-    fun onClick(thing: Thing) = clickListener(thing)
 }
 
 class CheckListener(

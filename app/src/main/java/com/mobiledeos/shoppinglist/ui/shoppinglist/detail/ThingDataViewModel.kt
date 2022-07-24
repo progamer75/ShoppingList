@@ -16,7 +16,6 @@ class ThingDataViewModel(private val _thing: Thing?) : ViewModel() {
     }
 
     fun addList() {
-        Log.i("aaaa", "${thing.value?.data?.name} / ${thing.value?.data?.listId}")
         MainRepository.addThing(thing.value!!)
         done.value = true
     }

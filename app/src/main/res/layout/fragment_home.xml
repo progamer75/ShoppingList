@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="vm"
-            type="com.mobiledeos.shoppinglist.ui.home.HomeViewModel" />
+            name="frag"
+            type="com.mobiledeos.shoppinglist.ui.home.HomeFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="32dp"
-            android:onClick="@{vm::onAddButton}"
+            android:onClick="@{frag::onAddButton}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

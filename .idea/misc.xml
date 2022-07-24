@@ -3,18 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/drawable/ic_delete_24.xml" value="0.3725" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/drawable/sl_check_icon_24dp.xml" value="0.531" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/drawable/sl_favourite_24dp.xml" value="0.532" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/activity_login.xml" value="0.5380208333333333" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/app_bar_main.xml" value="0.3052536231884058" />
-        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_home.xml" value="0.5380208333333333" />
-        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_list_data.xml" value="0.5380208333333333" />
-        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_shopping_list.xml" value="0.5380208333333333" />
-        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_thing_data.xml" value="0.3858695652173913" />
-        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/list_row.xml" value="0.5380208333333333" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_list_data.xml" value="0.1" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_shopping_list.xml" value="0.1" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/fragment_thing_data.xml" value="0.1" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/list_row.xml" value="0.1" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/nav_header_main.xml" value="0.5380208333333333" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/layout/thing_row.xml" value="0.5380208333333333" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/menu/activity_main_drawer.xml" value="0.5380208333333333" />
+        <entry key="..\:/Android/ShoppingList/app/src/main/res/menu/edit_menu.xml" value="0.5369791666666667" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/menu/list_data_menu.xml" value="0.5380208333333333" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/menu/main.xml" value="0.5380208333333333" />
         <entry key="..\:/Android/ShoppingList/app/src/main/res/menu/thing_data_menu.xml" value="0.5380208333333333" />

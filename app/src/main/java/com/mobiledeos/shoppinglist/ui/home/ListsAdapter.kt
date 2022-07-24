@@ -5,10 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mobiledeos.shoppinglist.ui.InteractionListeners
 import com.mobiledeos.shoppinglist.data.ShoppingList
 import com.mobiledeos.shoppinglist.databinding.ListRowBinding
 
-class ListsAdapter(val clickListener: ListsListener): ListAdapter<ShoppingList, RecyclerView.ViewHolder>(ShoppingListDiffCallback()) {
+class ListsAdapter(private val listeners: InteractionListeners<ShoppingList>):
+    ListAdapter<ShoppingList, RecyclerView.ViewHolder>(ShoppingListDiffCallback())
+{
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return RowViewHolder.from(parent)
@@ -16,13 +19,13 @@ class ListsAdapter(val clickListener: ListsListener): ListAdapter<ShoppingList, 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        (holder as RowViewHolder).bind(item, clickListener)
+        (holder as RowViewHolder).bind(item, listeners)
     }
 
     class RowViewHolder private constructor(private val binding: ListRowBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ShoppingList, clickListener: ListsListener) {
+        fun bind(item: ShoppingList, listeners: InteractionListeners<ShoppingList>) {
             binding.row = item
-            binding.clickListener = clickListener
+            binding.listener = listeners
             binding.executePendingBindings()
         }
 
@@ -43,10 +46,12 @@ class ShoppingListDiffCallback : DiffUtil.ItemCallback<ShoppingList>() {
     }
 
     override fun areContentsTheSame(oldItem: ShoppingList, newItem: ShoppingList): Boolean {
-        return oldItem == newItem
+        return false//oldItem.data == newItem.data
     }
 }
 
-class ListsListener(val clickListener: (shoppingList: ShoppingList) -> Unit) {
-    fun onClick(shoppingList: ShoppingList) = clickListener(shoppingList)
-}
+
+/*    val clickListener: (shoppingList: ShoppingList) -> Unit,
+    val longClickListener: (shoppingList: ShoppingList) -> Unit*/
+/*    fun onClick(shoppingList: ShoppingList) = clickListener(shoppingList)
+    fun onLongClick(shoppingList: ShoppingList) = longClickListener(shoppingList)*/
